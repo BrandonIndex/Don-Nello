@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rotisería Don Nello | San Clemente</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        /* --- 1. VARIABLES & RESET --- */
+        :root {
+            /* Colores Modo Claro */
+            --primary: #FF5722;
+            --primary-dark: #E64A19;
+            --bg-body: #F4F4F9;
+            --bg-card: #FFFFFF;
+            --text-main: #2D2D2D;
+            --text-light: #666666;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --radius: 12px;
+            --nav-bg: rgba(255, 255, 255, 0.98);
+            --accent-green: #4CAF50;
+        }
+
+        /* Colores Modo Oscuro */
+        body.dark-mode {
+            --primary: #FF7043;
+            --primary-dark: #D84315;
+            --bg-body: #121212;
+            --bg-card: #1E1E1E;
+            --text-main: #E0E0E0;
+            --text-light: #B0B0B0;
+            --shadow: 0 4px 20px rgba(0,0,0,0.5);
+            --nav-bg: rgba(30, 30, 30, 0.98);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.3s, color 0.3s; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            overflow-x: hidden;
+            padding-bottom: 80px; /* Espacio para botón WhatsApp */
+        }
+
+        h1, h2, h3 { font-family: 'Lobster', cursive; letter-spacing: 1px; }
+        a { text-decoration: none; color: inherit; }
+        img { display: block; width: 100%; height: auto; }
+
+        /* --- 2. HEADER & NAV --- */
+        header {
+            position: fixed; top: 0; width: 100%;
+            background: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            padding: 10px 5%;
+            z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: 70px;
+        }
+
+        .brand { display: flex; align-items: center; gap: 10px; }
+        .brand img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
+        .brand span { font-family: 'Lobster', cursive; font-size: 1.4rem; color: var(--primary); }
+
+        .header-controls { display: flex; align-items: center; gap: 15px; }
+
+        .theme-switch {
+            cursor: pointer;
+            border: 1px solid var(--text-light);
+            border-radius: 20px; padding: 5px 12px;
+            display: flex; align-items: center; gap: 8px;
+            font-size: 0.75rem; font-weight: 600;
+        }
+        .menu-btn { font-size: 1.6rem; cursor: pointer; color: var(--text-main); padding: 5px; }
+
+        /* Menú Lateral */
+        .side-menu {
+            position: fixed; top: 0; right: -100%;
+            width: 80%; max-width: 300px; height: 100vh;
+            background: var(--bg-card); z-index: 1002;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.3);
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            padding: 80px 30px;
+            display: flex; flex-direction: column; gap: 25px;
+        }
+        .side-menu.active { right: 0; }
+        .side-menu a { font-size: 1.2rem; font-weight: 500; padding-bottom: 10px; border-bottom: 1px solid var(--text-light); }
+        
+        .overlay {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.6); z-index: 1001;
+            opacity: 0; visibility: hidden; transition: 0.3s;
+        }
+        .overlay.active { opacity: 1; visibility: visible; }
+
+        /* --- 3. HERO (PORTADA) --- */
+        .hero {
+            height: 65vh; min-height: 450px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url('img/portada.jpg');
+            background-size: cover; background-position: center;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; color: white; padding: 20px;
+            margin-top: 0;
+        }
+        .hero-content { animation: fadeInUp 1s ease; }
+        .hero h1 { font-size: 2.8rem; text-shadow: 2px 2px 5px rgba(0,0,0,0.7); margin-bottom: 0.5rem; line-height: 1.1; }
+        .hero p { font-size: 1rem; opacity: 0.9; margin-bottom: 1.5rem; }
+        
+        .btn-cta {
+            background: var(--primary); color: white;
+            padding: 14px 35px; border-radius: 50px;
+            font-weight: 700; display: inline-flex; align-items: center; gap: 10px;
+            box-shadow: 0 4px 15px rgba(255, 87, 34, 0.5);
+            font-size: 1rem;
+        }
+        .btn-cta:active { transform: scale(0.95); }
+
+        /* --- 4. INFO BAR --- */
+        .info-bar {
+            background: var(--bg-card);
+            width: 92%; max-width: 900px; margin: -40px auto 0;
+            border-radius: var(--radius); box-shadow: var(--shadow);
+            padding: 25px 15px; position: relative; z-index: 10;
+            display: grid; grid-template-columns: repeat(2, 1fr); /* 2 columnas en movil */
+            gap: 20px; text-align: center;
+        }
+        .info-item i { font-size: 1.8rem; color: var(--accent-green); margin-bottom: 8px; }
+        .info-item h4 { font-size: 0.95rem; margin-bottom: 2px; font-weight: 700; }
+        .info-item p { font-size: 0.8rem; color: var(--text-light); }
+
+        /* --- 5. GALERÍA (Lightbox) --- */
+        .gallery-section { padding: 60px 5%; text-align: center; }
+        .section-title { font-size: 2.2rem; color: var(--primary); margin-bottom: 30px; }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Adaptable a pantallas chicas */
+            gap: 10px;
+        }
+        
+        .gallery-item {
+            border-radius: 10px; overflow: hidden;
+            height: 140px; box-shadow: var(--shadow);
+            position: relative; cursor: zoom-in;
+        }
+        .gallery-item img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.4s;
+        }
+        
+        /* Lightbox (Visor Grande) */
+        .lightbox {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 2000;
+            display: none; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .lightbox.active { display: flex; opacity: 1; }
+        /* ASÍ DEBE QUEDAR (LA SOLUCIÓN) */
+.lightbox img {
+    max-width: 95%; 
+    max-height: 85vh; /* Le di un poquito más de altura */
+    width: auto;  /* Importante para resetear anchos forzados */
+    height: auto; /* Importante para resetear altos forzados */
+    object-fit: contain; /* LA CLAVE: Mantiene la proporción original */
+    border-radius: 5px; 
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        .lightbox-close {
+            position: absolute; top: 20px; right: 20px;
+            color: white; font-size: 2.5rem; cursor: pointer;
+            z-index: 2001;
+        }
+
+        /* --- 6. MAPA --- */
+        .map-section { padding: 40px 5%; background: var(--bg-card); text-align: center; }
+        .map-wrapper {
+            width: 100%; height: 350px;
+            border-radius: var(--radius); overflow: hidden;
+            border: 3px solid var(--primary); margin-top: 20px;
+            position: relative;
+        }
+        .map-wrapper iframe { width: 100%; height: 100%; border: 0; }
+
+        /* --- FOOTER & STICKY --- */
+        footer { background: #1a1a1a; color: #888; padding: 40px 20px 100px; text-align: center; }
+        .sticky-whatsapp {
+            position: fixed; bottom: 20px; right: 20px;
+            background: #25D366; color: white;
+            width: 60px; height: 60px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 1500; animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- MEDIA QUERIES (CELULARES) --- */
+        @media (min-width: 768px) {
+            .hero h1 { font-size: 4rem; }
+            .info-bar { grid-template-columns: repeat(4, 1fr); }
+            .gallery-item { height: 200px; }
+            .gallery-item:hover img { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightbox-img" src="" alt="Vista Previa">
+    </div>
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <nav class="side-menu" id="side-menu">
+        <h3 style="color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 10px;">Menú</h3>
+        <a href="#inicio" onclick="toggleMenu()"><i class="fas fa-home"></i> Inicio</a>
+        <a href="#servicios" onclick="toggleMenu()"><i class="fas fa-concierge-bell"></i> Servicios</a>
+        <a href="#galeria" onclick="toggleMenu()"><i class="fas fa-images"></i> Galería</a>
+        <a href="#ubicacion" onclick="toggleMenu()"><i class="fas fa-map-marked-alt"></i> Ubicación</a>
+    </nav>
+
+    <header>
+        <div class="brand">
+            <img src="img/logo.jpg" alt="Logo" onerror="this.src='img/logo.png'"> 
+            <span>Don Nello</span>
+        </div>
+        <div class="header-controls">
+            <div class="theme-switch" id="theme-toggle">
+                <i class="fas fa-moon"></i> <span>Modo</span>
+            </div>
+            <div class="menu-btn" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero" id="inicio">
+        <div class="hero-content">
+            <h1>El verdadero<br>sabor casero</h1>
+            <p>San Clemente del Tuyú • 5.0 ★★★★★</p>
+            <a href="https://wa.me/5492252519665" class="btn-cta">
+                <i class="fab fa-whatsapp"></i> ¡PEDIR AHORA!
+            </a>
+        </div>
+    </section>
+
+    <section class="info-bar" id="servicios" data-aos="fade-up">
+        <div class="info-item">
+            <i class="fas fa-motorcycle"></i>
+            <h4>Delivery</h4>
+            <p>A domicilio</p>
+        </div>
+        <div class="info-item">
+            <i class="fas fa-shopping-bag"></i>
+            <h4>Take Away</h4>
+            <p>Retiro local</p>
+        </div>
+        <div class="info-item">
+            <i class="far fa-credit-card"></i>
+            <h4>Pagos</h4>
+            <p>Débito / Efvo</p>
+        </div>
+        <div class="info-item">
+            <i class="far fa-clock" id="status-icon"></i>
+            <h4 id="status-text">...</h4>
+            <p id="status-detail">Verificando</p>
+        </div>
+    </section>
+
+    <section class="gallery-section" id="galeria">
+        <h2 class="section-title" data-aos="fade-down">Galeria</h2>
+        <div class="gallery-grid" id="gallery-container">
+            </div>
+    </section>
+
+    <section class="map-section" id="ubicacion" data-aos="fade-up">
+        <h2 class="section-title">¿Dónde Estamos?</h2>
+        <p>Calle 37 y 8, San Clemente del Tuyú</p>
+        
+        <div class="map-wrapper">
+            <iframe 
+                src="https://maps.google.com/maps?q=Calle+8+y+Calle+37,+San+Clemente+del+Tuyú&t=&z=17&ie=UTF8&iwloc=&output=embed" 
+                allowfullscreen="" 
+                loading="lazy">
+            </iframe>
+        </div>
+        <br>
+        <a href="https://www.google.com/maps/search/?api=1&query=Calle+37+y+8,+San+Clemente+del+Tuyú" target="_blank" class="btn-cta" style="font-size: 0.9rem; background-color: #4285F4;">
+            <i class="fas fa-location-arrow"></i> Ver Ruta en GPS
+        </a>
+    </section>
+
+    <footer>
+        <h3>Rotisería Don Nello</h3>
+        <p>San Clemente del Tuyú</p>
+        <br>
+        <a href="tel:2252519665" style="color:white; font-size:1.3rem; font-weight:bold;">📞 2252-51-9665</a>
+    </footer>
+
+    <a href="https://wa.me/5492252519665" class="sticky-whatsapp" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // 1. Iniciar Animaciones
+        AOS.init();
+
+        // 2. Galería de 17 Fotos con Lightbox
+        const gallery = document.getElementById('gallery-container');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(src) {
+            lightboxImg.src = src;
+            lightbox.classList.add('active');
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+        }
+
+        for (let i = 1; i <= 17; i++) {
+            const div = document.createElement('div');
+            div.className = 'gallery-item';
+            div.setAttribute('data-aos', 'fade-up');
+            
+            // Crea la imagen
+            const img = document.createElement('img');
+            img.src = `./img/comida${i}.jpg`; // Busca comida1.jpg ... comida17.jpg
+            img.loading = "lazy";
+            img.alt = "Plato Don Nello";
+            
+            // Evento click para abrir en grande
+            div.onclick = function() { openLightbox(img.src); };
+
+            div.appendChild(img);
+            gallery.appendChild(div);
+        }
+
+        // 3. Menú Lateral
+        function toggleMenu() {
+            document.getElementById('side-menu').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        // 4. Tema Claro/Oscuro
+        const themeBtn = document.getElementById('theme-toggle');
+        const icon = themeBtn.querySelector('i');
+
+        if(localStorage.getItem('theme') === 'dark'){
+            document.body.classList.add('dark-mode');
+            icon.className = 'fas fa-sun';
+        }
+
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if(document.body.classList.contains('dark-mode')){
+                localStorage.setItem('theme', 'dark');
+                icon.className = 'fas fa-sun';
+            } else {
+                localStorage.setItem('theme', 'light');
+                icon.className = 'fas fa-moon';
+            }
+        });
+
+        // 5. Horarios
+        function checkTime() {
+            const now = new Date();
+            const day = now.getDay(); 
+            const mins = now.getHours() * 60 + now.getMinutes();
+            
+            const open = 19 * 60; 
+            const close = (day === 0) ? (23 * 60 + 30) : (23 * 60);
+            
+            const text = document.getElementById('status-text');
+            const icon = document.getElementById('status-icon');
+            const det = document.getElementById('status-detail');
+
+            if(mins >= open && mins < close) {
+                text.innerText = "ABIERTO";
+                text.style.color = "var(--accent-green)";
+                icon.className = "fas fa-door-open";
+                icon.style.color = "var(--accent-green)";
+                det.innerText = (day === 0) ? "Cierra 23:30" : "Cierra 23:00";
+            } else {
+                text.innerText = "CERRADO";
+                text.style.color = "#D32F2F"; // Rojo Material
+                icon.className = "fas fa-door-closed";
+                icon.style.color = "#D32F2F";
+                det.innerText = "Abre 19:00";
+            }
+        }
+        checkTime();
+    </script>
+</body>
+</html>
